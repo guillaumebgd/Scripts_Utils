@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ "$#" -eq 0 ]; then
+    echo "push_that: Needs several arguments -> 'Your commit messages'."
+    exit 1
+fi
+
+function push_function() {
+
+    local commit_args=''
+
+    for i in "${!ARRAY_ARGS[@]}"; do
+        commit_args+=' -m '"${ARRAY_ARGS[i]}"
+    done
+    git add --all ;
+    git commit $commit_args ;
+    git push origin master ;
+}
+
+ARRAY_ARGS=()
+
+IFS=' ' read -r -a ARRAY_ARGS <<< "$@"
+
+push_function $# "${ARRAY_ARGS[@]}"
