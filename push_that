@@ -21,4 +21,4 @@ ARRAY_ARGS=()
 
 IFS=' ' read -r -a ARRAY_ARGS <<< "$@"
 
-push_function $# "${ARRAY_ARGS[@]}"
+push_function "${ARRAY_ARGS[@]}"
