@@ -11,24 +11,34 @@ if argc <= 1:
 commit_args = ''
 
 for arg in sys.argv[1:]:
-    commit_args += '-m ' + arg + ' '
+    contain_space = False
+    if ' ' in arg:
+        contain_space = True
+    commit_args += '-m '
+    if contain_space:
+        commit_args += "'" + arg + "'"
+    else:
+        commit_args += arg
+    commit_args += ' '
 
 commit_args = commit_args[:-1]
 
 if os.system('git add --all') != 0:
-    print("\031[0;0;0m[1/3] - \031[1;32;40mAn unexpected error occured at the file adding process.\031[0;0;0m")
+    print("\033[0;0;0m[1/3] - \031[1;32;40mAn unexpected error occured at the file adding process.\033[0;0;0m")
     sys.exit(1)
 else:
     print("\033[0;0;0m[1/3] - \033[1;32;40mAdded all of the non-ignored files to the tracker.\033[0;0;0m")
 
+print(commit_args)
+
 if os.system('git commit ' + commit_args) != 0:
-    print("\031[0;0;0m[1/3] - \031[1;32;40mAn unexpected error occured at the commit state.\031[0;0;0m")
+    print("\031[0;0;0m[2/3] - \033[1;32;40mAn unexpected error occured at the commit state.\033[0;0;0m")
     sys.exit(1)
 else:
     print("\033[0;0;0m[2/3] - \033[1;32;40mSuccessfully Committed.\033[0;0;0m")
 
 if os.system('git push') != 0:
-    print("\031[0;0;0m[1/3] - \031[1;32;40mAn unexpected error occured at the data push state.\031[0;0;0m")
+    print("\033[0;0;0m[3/3] - \031[1;32;40mAn unexpected error occured at the data push state.\033[0;0;0m")
     sys.exit(1)
 else:
     print("\033[0;0;0m[3/3] - \033[1;32;40mPushed data.\033[0;0;0m")
