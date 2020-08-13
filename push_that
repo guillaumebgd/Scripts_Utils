@@ -38,13 +38,16 @@ for arg in sys.argv[3:]:
 
 output = 0
 
+valid_answers = ['y', 'ye', 'yes']
+invalid_answers = ['n', 'no']
+
 #Add files Step
 
 while (1):
     answer = input('Add all trackable files to git [yes/no] ? ')
-    if (answer == 'y' or answer == 'ye' or answer == 'yes'):
+    if answer in valid_answers:
         pass
-    elif (answer == 'n' or answer == 'no'):
+    elif answer in invalid_answers:
         sys.exit(0)
     else:
         continue
@@ -69,9 +72,9 @@ else:
 
 while (1):
     answer = input('Commit to local git with your given arguments [yes/no] ? ')
-    if (answer == 'y' or answer == 'ye' or answer == 'yes'):
+    if answer in valid_answers:
         pass
-    elif (answer == 'n' or answer == 'no'):
+    elif answer in invalid_answers:
         sys.exit(0)
     else:
         continue
@@ -97,9 +100,9 @@ else:
 
 while (1):
     answer = input('Push data [yes/no] ? ')
-    if (answer == 'y' or answer == 'ye' or answer == 'yes'):
+    if answer in valid_answers:
         pass
-    elif (answer == 'n' or answer == 'no'):
+    elif answer in invalid_answers:
         sys.exit(0)
     else:
         continue
