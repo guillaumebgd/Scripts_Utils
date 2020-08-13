@@ -60,7 +60,7 @@ with open(os.devnull, 'wb') as devnull:
     except subprocess.CalledProcessError as e:
         print("%s[2/3] - %sAn unexpected error occured when adding modified files through 'git commit %s'.%s"
             % (bcolors.ENDC, bcolors.FAIL, commit_args, bcolors.ENDC))
-        sys.exit(1)
+        sys.exit(3)
 
 if (output == 0):
     print('%s[2/3] - %sSuccessfully Committed.%s'
