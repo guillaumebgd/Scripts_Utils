@@ -39,6 +39,17 @@ for arg in sys.argv[3:]:
 output = 0
 
 #Add files Step
+
+while (1):
+    answer = input('Add all trackable files to git [yes/no] ? ')
+    if (answer == 'y' or answer == 'ye' or answer == 'yes'):
+        pass
+    elif (answer == 'n' or answer == 'no'):
+        sys.exit(0)
+    else:
+        continue
+    break
+
 with open(os.devnull, 'wb') as devnull:
     try:
         output = subprocess.check_call(['git', 'add', '--all'], stdout=devnull, stderr=subprocess.STDOUT)
@@ -55,6 +66,17 @@ else:
     sys.exit(1)
 
 #Commit Step
+
+while (1):
+    answer = input('Commit to local git with your given arguments [yes/no] ? ')
+    if (answer == 'y' or answer == 'ye' or answer == 'yes'):
+        pass
+    elif (answer == 'n' or answer == 'no'):
+        sys.exit(0)
+    else:
+        continue
+    break
+
 with open(os.devnull, 'wb') as devnull:
     try:
         output = subprocess.check_call(['git', 'commit'] + commit_args, stdout=devnull, stderr=subprocess.STDOUT)
@@ -72,6 +94,17 @@ else:
     sys.exit(1)
 
 #Push Step
+
+while (1):
+    answer = input('Push data [yes/no] ? ')
+    if (answer == 'y' or answer == 'ye' or answer == 'yes'):
+        pass
+    elif (answer == 'n' or answer == 'no'):
+        sys.exit(0)
+    else:
+        continue
+    break
+
 with open(os.devnull, 'wb') as devnull:
     try:
         output = subprocess.check_call(['git', 'push', sys.argv[1], sys.argv[2]], stdout=devnull, stderr=subprocess.STDOUT)
