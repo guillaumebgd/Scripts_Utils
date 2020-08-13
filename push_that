@@ -4,43 +4,43 @@ import sys, os
 
 argc = len(sys.argv)
 
-if argc <= 1:
-    print('Lack of commit argument(s).')
+usage = '''USAGE:
+%s 'remote' 'local_branch' 'commit_arg_1' 'commit_arg_2' ...
+
+\tremote: the remote on which you want to push data.
+\tlocal_branch: your branch you want to push news onto.
+\tcommit_arg_X: corresponds to a '-m' flag of 'git commit'.'''
+
+#Check for a correct amount of arguments.
+if argc < 3:
+    print(usage % (sys.argv[0] if (sys.argv and sys.argv[0]) else './push_that'))
+    print('\nError tracked: Lack of argument(s), minimum: 3.')
     sys.exit(1)
 
 commit_args = ''
 
-for arg in sys.argv[1:]:
-    contain_space = False
-    if ' ' in arg:
-        contain_space = True
-    commit_args += '-m '
-    if contain_space:
-        commit_args += "'" + arg + "'"
-    else:
-        commit_args += arg
-    commit_args += ' '
-
+#Puts all of the commit arguments into 'commit_args'.
+for arg in sys.argv[3:]:
+    contain_space = ' ' in arg
+    commit_args += '-m ' + ("'" + arg + "'" if contain_space else arg) + ' '
 commit_args = commit_args[:-1]
 
 if os.system('git add --all') != 0:
-    print("\033[0;0;0m[1/3] - \033[1;32;40mAn unexpected error occured at the file adding process.\033[0;0;0m")
+    print("\033[0;0;0m[1/3] - \033[1;32;40mAn unexpected error occured when adding modified files through 'git add --all'.\033[0;0;0m")
     sys.exit(1)
 else:
-    print("\033[0;0;0m[1/3] - \033[1;32;40mAdded all of the non-ignored files to the tracker.\033[0;0;0m")
-
-print(commit_args)
+    print("\033[0;0;0m[1/3] - \033[1;32;40mAdded all of the non-ignored files to git.\033[0;0;0m")
 
 if os.system('git commit ' + commit_args) != 0:
-    print("\033[0;0;0m[2/3] - \033[1;32;40mAn unexpected error occured at the commit state.\033[0;0;0m")
+    print("\033[0;0;0m[2/3] - \033[1;32;40mAn unexpected error occured when adding modified files through 'git commit %s'.\033[0;0;0m" % (commit_args))
     sys.exit(1)
 else:
     print("\033[0;0;0m[2/3] - \033[1;32;40mSuccessfully Committed.\033[0;0;0m")
 
-if os.system('git push') != 0:
-    print("\033[0;0;0m[3/3] - \033[1;32;40mAn unexpected error occured at the data push state.\033[0;0;0m")
+if os.system('git push ' + sys.argv[1] + ' ' + sys.argv[2]) != 0:
+    print("\033[0;0;0m[3/3] - \033[1;32;40mAn unexpected error occured when adding modified files through 'git push %s'.\033[0;0;0m" % (sys.argv[1] + ' ' + sys.argv[2]))
     sys.exit(1)
 else:
-    print("\033[0;0;0m[3/3] - \033[1;32;40mPushed data.\033[0;0;0m")
+    print("\033[0;0;0m[3/3] - \033[1;32;40mPushed data to %s from %s.\033[0;0;0m" % (sys.argv[1], sys.argv[2]))
 
 sys.exit(0)
