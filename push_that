@@ -37,33 +37,53 @@ for arg in sys.argv[3:]:
 
 output = 0
 
+#Add files Step
 with open(os.devnull, 'wb') as devnull:
-    output = subprocess.check_call(['git', 'add', '--all'], stdout=devnull, stderr=subprocess.STDOUT)
-if output != 0:
+    try:
+        output = subprocess.check_call(['git', 'add', '--all'], stdout=devnull, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        print("%s[2/3] - %sAn unexpected error occured when adding modified files through 'git commit %s'.%s"
+            % (bcolors.ENDC, bcolors.FAIL, commit_args, bcolors.ENDC))
+        sys.exit(1)
+if (output == 0):
+    print("%s[1/3] - %sAdded all of the non-ignored files to git.%s"
+            % (bcolors.ENDC, bcolors.OKGREEN, bcolors.ENDC))
+else:
     print("%s[1/3] - %sAn unexpected error occured when adding modified files through 'git add --all'.%s"
             % (bcolors.ENDC, bcolors.FAIL, bcolors.ENDC))
     sys.exit(1)
-else:
-    print("%s[1/3] - %sAdded all of the non-ignored files to git.%s"
-            % (bcolors.ENDC, bcolors.OKGREEN, bcolors.ENDC))
 
+#Commit Step
 with open(os.devnull, 'wb') as devnull:
-    output = subprocess.check_call(['git', 'commit'] + commit_args, stdout=devnull, stderr=subprocess.STDOUT)
-if output != 0:
+    try:
+        output = subprocess.check_call(['git', 'commit'] + commit_args, stdout=devnull, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        print("%s[2/3] - %sAn unexpected error occured when adding modified files through 'git commit %s'.%s"
+            % (bcolors.ENDC, bcolors.FAIL, commit_args, bcolors.ENDC))
+        sys.exit(1)
+
+if (output == 0):
+    print('%s[2/3] - %sSuccessfully Committed.%s'
+            % (bcolors.ENDC, bcolors.OKGREEN, bcolors.ENDC))
+else:
     print("%s[2/3] - %sAn unexpected error occured when adding modified files through 'git commit %s'.%s"
             % (bcolors.ENDC, bcolors.FAIL, commit_args, bcolors.ENDC))
     sys.exit(1)
-else:
-    print('%s[2/3] - %sSuccessfully Committed.%s'
-            % (bcolors.ENDC, bcolors.OKGREEN, bcolors.ENDC))
 
+#Push Step
 with open(os.devnull, 'wb') as devnull:
     try:
         output = subprocess.check_call(['git', 'push', sys.argv[1], sys.argv[2]], stdout=devnull, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         print("%s[3/3] - %sAn unexpected error occured when adding modified files through 'git push %s'.%s"
                 % (bcolors.ENDC, bcolors.FAIL, sys.argv[1] + ' ' + sys.argv[2], bcolors.ENDC))
+        sys.exit(1)
 
-print("%s[3/3] - %sPushed data to %s from %s.%s" % (bcolors.ENDC, bcolors.OKGREEN, sys.argv[1], sys.argv[2], bcolors.ENDC))
+if (output == 0):
+    print("%s[3/3] - %sPushed data to %s from %s.%s" % (bcolors.ENDC, bcolors.OKGREEN, sys.argv[1], sys.argv[2], bcolors.ENDC))
+else:
+    print("%s[3/3] - %sAn unexpected error occured when adding modified files through 'git push %s'.%s"
+                % (bcolors.ENDC, bcolors.FAIL, sys.argv[1] + ' ' + sys.argv[2], bcolors.ENDC))
+    sys.exit(1)
 
 sys.exit(0)
