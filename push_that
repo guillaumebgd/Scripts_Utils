@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 
-import sys, os
+import sys, os, subprocess
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 argc = len(sys.argv)
 
@@ -14,28 +24,22 @@ usage = '''USAGE:
 #Check for a correct amount of arguments.
 if argc < 3:
     print(usage % (sys.argv[0] if (sys.argv and sys.argv[0]) else './push_that'))
-    print('\nError tracked: Lack of argument(s), minimum: 3.')
+    print('\n%sError tracked: Lack of argument(s), minimum: 3.%s'
+            % (bcolors.FAIL, bcolors.ENDC))
     sys.exit(1)
 
-commit_args = ''
+commit_args = []
 
-#Puts all of the commit arguments into 'commit_args'.
+#Puts all of the commit arguments into 'commit_args' with the git commit flag '-m'.
 for arg in sys.argv[3:]:
-    contain_space = ' ' in arg
-    commit_args += '-m ' + ("'" + arg + "'" if contain_space else arg) + ' '
-commit_args = commit_args[:-1]
+    commit_args.append('-m')
+    commit_args.append(arg)
 
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+output = 0
 
-if os.system('git add --all') != 0:
+with open(os.devnull, 'wb') as devnull:
+    output = subprocess.check_call(['git', 'add', '--all'], stdout=devnull, stderr=subprocess.STDOUT)
+if output != 0:
     print("%s[1/3] - %sAn unexpected error occured when adding modified files through 'git add --all'.%s"
             % (bcolors.ENDC, bcolors.FAIL, bcolors.ENDC))
     sys.exit(1)
@@ -43,7 +47,9 @@ else:
     print("%s[1/3] - %sAdded all of the non-ignored files to git.%s"
             % (bcolors.ENDC, bcolors.OKGREEN, bcolors.ENDC))
 
-if os.system('git commit ' + commit_args) != 0:
+with open(os.devnull, 'wb') as devnull:
+    output = subprocess.check_call(['git', 'commit'] + commit_args, stdout=devnull, stderr=subprocess.STDOUT)
+if output != 0:
     print("%s[2/3] - %sAn unexpected error occured when adding modified files through 'git commit %s'.%s"
             % (bcolors.ENDC, bcolors.FAIL, commit_args, bcolors.ENDC))
     sys.exit(1)
@@ -51,7 +57,9 @@ else:
     print('%s[2/3] - %sSuccessfully Committed.%s'
             % (bcolors.ENDC, bcolors.OKGREEN, bcolors.ENDC))
 
-if os.system('git push ' + sys.argv[1] + ' ' + sys.argv[2]) != 0:
+with open(os.devnull, 'wb') as devnull:
+    output = subprocess.check_call(['git', 'push', sys.argv[1], sys.argv[2]], stdout=devnull, stderr=subprocess.STDOUT)
+if output != 0:
     print("%s[3/3] - %sAn unexpected error occured when adding modified files through 'git push %s'.%s"
             % (bcolors.ENDC, bcolors.FAIL, sys.argv[1] + ' ' + sys.argv[2], bcolors.ENDC))
     sys.exit(1)
