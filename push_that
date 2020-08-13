@@ -61,7 +61,8 @@ with open(os.devnull, 'wb') as devnull:
     try:
         output = subprocess.check_call(['git', 'push', sys.argv[1], sys.argv[2]], stdout=devnull, stderr=subprocess.STDOUT)
     except:
-        pass
+        output = subprocess.CalledProcessError
+        print(output)
 if output != 0:
     print("%s[3/3] - %sAn unexpected error occured when adding modified files through 'git push %s'.%s"
             % (bcolors.ENDC, bcolors.FAIL, sys.argv[1] + ' ' + sys.argv[2], bcolors.ENDC))
