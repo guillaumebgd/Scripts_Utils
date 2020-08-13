@@ -21,11 +21,16 @@ usage = '''USAGE:
 \tlocal_branch: your branch you want to push news onto.
 \tcommit_arg_X: corresponds to a '-m' flag of 'git commit'.'''
 
+#Check for help flag.
+if argc == 2 and (sys.argv[1] == '-h' or sys.argv[1] == '--help'):
+    print(usage % (sys.argv[0] if (sys.argv and sys.argv[0]) else './push_that'))
+    sys.exit(0)
+
 #Check for a correct amount of arguments.
 if argc < 3:
     print(usage % (sys.argv[0] if (sys.argv and sys.argv[0]) else './push_that'))
-    print('\n%sError tracked: Lack of argument(s), minimum: 3.%s'
-            % (bcolors.FAIL, bcolors.ENDC))
+    print('\n%sError tracked%s: %sLack of argument(s), minimum: 3.%s'
+            % (bcolors.WARNING, bcolors.ENDC, bcolors.FAIL, bcolors.ENDC))
     sys.exit(1)
 
 commit_args = []
