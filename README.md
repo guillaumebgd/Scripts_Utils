@@ -6,7 +6,7 @@ When an idea hits me, I try to add scripts here!
 
 * ### push_that
 
-Shortcut to add files to git, commit changes and push data all in one.
+Shortcut to add files to git, commit changes and push data all at once.
 
 ![push_that_help_flag](https://github.com/guillaumebgd/Script_Utils/blob/master/.github_assets/script_utils_push_that_help.png?raw=true)
 
